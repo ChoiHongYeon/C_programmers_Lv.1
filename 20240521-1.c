@@ -6,67 +6,48 @@
 
 int* solution(const char* today, const char* terms[], size_t terms_len, const char* privacies[], size_t privacies_len) {
 
-    char* terms_type = (char*)malloc(sizeof(char) * terms_len);
-    int* terms_month = (int*)malloc(sizeof(int) * terms_len);
-    int* privacies_year = (int*)malloc(sizeof(int) * privacies_len);
-    int* privacies_month = (int*)malloc(sizeof(int) * privacies_len);
-    int* privacies_date = (int*)malloc(sizeof(int) * privacies_len);
-    char* privacies_type = (char*)malloc(sizeof(char) * privacies_len);
-
-    int today_year, today_month, today_date;
-    sscanf(today, "%d.%d.%d", &today_year, &today_month, &today_date);
-
+    int today_year, today_month, today_day;
+    sscanf(today, "%d.%d.%d", &today_year, &today_month, &today_day);
+    today_day += (today_year * 12 * 28) + (today_month * 28);
+    
+    char terms_type[20];
+    int terms_day[20];
     for (int i = 0;i < terms_len;i++) {
-        sscanf(terms[i], "%c %d", &terms_type[i], &terms_month[i]);
+        sscanf(terms[i], "%c %d", &terms_type[i], &terms_day[i]);
+        terms_day[i] *= 28;
     }
 
+    int privacies_day[100];
+    char privacies_type[100];
     for (int i = 0;i < privacies_len;i++) {
-        sscanf(privacies[i], "%d.%d.%d %c", &privacies_year[i], &privacies_month[i], &privacies_date[i], &privacies_type[i]);
+        int privacies_year, privacies_month;
+        sscanf(privacies[i], "%d.%d.%d %c", &privacies_year, &privacies_month, &privacies_day[i], &privacies_type[i]);
+        privacies_day[i] += (privacies_year * 12 * 28) + (privacies_month * 28);
     }
 
     for (int i = 0;i < privacies_len;i++) {
         for (int j = 0;j < terms_len;j++) {
             if (privacies_type[i] == terms_type[j]) {
-                privacies_month[i] += terms_month[j];
+                privacies_day[i] += terms_day[j];
                 break;
             }
-        }
-        while (privacies_month[i] > 12) {
-            privacies_month[i] -= 12;
-            privacies_year[i]++;
         }
     }
 
     int answer_len = 0;
     for (int i = 0;i < privacies_len;i++) {
-        if (today_year > privacies_year[i])
-            answer_len++;
-        else if (today_year == privacies_year[i] && today_month > privacies_month[i])
-            answer_len++;
-        else if (today_year == privacies_year[i] && today_month == privacies_month[i] && today_date > privacies_date[i])
+        if (today_day > privacies_day[i])
             answer_len++;
     }
 
     int* answer = (int*)malloc(sizeof(int) * answer_len);
     int k = 0;
     for (int i = 0;i < privacies_len;i++) {
-        if (today_year > privacies_year[i])
-            answer[k++] = i;
-        else if (today_year == privacies_year[i] && today_month > privacies_month[i])
-            answer[k++] = i;
-        else if (today_year == privacies_year[i] && today_month == privacies_month[i] && today_date > privacies_date[i])
-            answer[k++] = i;
+        if (today_day > privacies_day[i])
+            answer[k++] = i + 1;
     }
 
-    free(terms_type);
-    free(terms_month);
-    free(privacies_year);
-    free(privacies_month);
-    free(privacies_date);
-    free(privacies_type);
-
     return answer;
-
 }
 
 void main()
