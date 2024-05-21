@@ -39,22 +39,22 @@ int* solution(const char* today, const char* terms[], size_t terms_len, const ch
 
     int answer_len = 0;
     for (int i = 0;i < privacies_len;i++) {
-        if (privacies_year[i] > today_year)
+        if (today_year > privacies_year[i])
             answer_len++;
-        else if (privacies_year[i] == today_year && privacies_month[i] > today_month)
+        else if (today_year == privacies_year[i] && today_month > privacies_month[i])
             answer_len++;
-        else if (privacies_year[i] == today_year && privacies_month[i] == today_month && privacies_date[i] > today_date)
+        else if (today_year == privacies_year[i] && today_month == privacies_month[i] && today_date > privacies_date[i])
             answer_len++;
     }
 
     int* answer = (int*)malloc(sizeof(int) * answer_len);
     int k = 0;
     for (int i = 0;i < privacies_len;i++) {
-        if (privacies_year[i] > today_year)
+        if (today_year > privacies_year[i])
             answer[k++] = i;
-        else if (privacies_year[i] == today_year && privacies_month[i] > today_month)
+        else if (today_year == privacies_year[i] && today_month > privacies_month[i])
             answer[k++] = i;
-        else if (privacies_year[i] == today_year && privacies_month[i] == today_month && privacies_date[i] > today_date)
+        else if (today_year == privacies_year[i] && today_month == privacies_month[i] && today_date > privacies_date[i])
             answer[k++] = i;
     }
 
@@ -83,17 +83,9 @@ void main()
     size_t privacies_len2 = 5;
     int* result1 = solution(today1, terms1, terms_len1, privacies1, privacies_len1);
     int* result2 = solution(today2, terms2, terms_len2, privacies2, privacies_len2);
-    int result_len1 = sizeof(result1) / sizeof(result1[0]);
-    int result_len2 = sizeof(result2) / sizeof(result2[0]);
 
-    for (int i = 0;i < result_len1;i++) {
-        printf("%d ", result1[i]);
-    }
-    printf("\n");
-    for (int i = 0;i < result_len2;i++) {
-        printf("%d ", result2[i]);
-    }
-    printf("\n");
+    printf("%d %d\n", result1[0], result1[1]);
+    printf("%d %d %d\n", result2[0], result2[1], result2[2]);
 
     free(result1);
     free(result2);
