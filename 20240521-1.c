@@ -28,7 +28,7 @@ int* solution(const char* today, const char* terms[], size_t terms_len, const ch
     for (int i = 0;i < privacies_len;i++) {
         for (int j = 0;j < terms_len;j++) {
             if (privacies_type[i] == terms_type[j]) {
-                privacies_day[i] += terms_day[j];
+                privacies_day[i] += terms_day[j] - 1;
                 break;
             }
         }
