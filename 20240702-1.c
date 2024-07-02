@@ -5,30 +5,22 @@
 #include <stdlib.h>
 
 int solution(int nums[], size_t nums_len) {
-
-    int numbers[2998] = { 0, };
     
-    int n = 0;
+    int answer = 0;
     for (int i = 0; i < nums_len - 2; i++) {
         for (int j = i + 1;j < nums_len - 1;j++) {
             for (int k = j + 1; k < nums_len; k++) {
-                numbers[nums[i] + nums[j] + nums[k]] = nums[i] + nums[j] + nums[k];
-            }
-        }
-    }
-
-    int answer = 0;
-    for (int i = 3;i < 2999;i++) {
-        if (numbers[i] != 0) {
-            bool b = true;
-            for (int j = 2;j < i;j++) {
-                if (i % j == 0) {
-                    b = false;
-                    break;
+                int number = nums[i] + nums[j] + nums[k];
+                int n = 0;
+                for (int l = 2;l < number;l++) {
+                    if (number % l == 0) {
+                        n = 1;
+                        break;
+                    }
                 }
+                if (n == 0)
+                    answer++;
             }
-            if (b == true)
-                answer++;
         }
     }
 
